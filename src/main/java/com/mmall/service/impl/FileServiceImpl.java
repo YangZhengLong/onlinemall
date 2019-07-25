@@ -50,7 +50,7 @@ public class FileServiceImpl implements IFileService {
             //已经长传到FTP服务器
 
             //上传完之后，删除upload下面的文件
-//            targetFile.delete();
+            targetFile.delete();
 
         } catch (IOException e) {
             logger.error("上传文件异常",e);
