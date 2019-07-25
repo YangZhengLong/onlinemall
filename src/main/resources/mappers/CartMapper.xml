@@ -26,10 +26,8 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.mmall.pojo.Cart" >
-    insert into mmall_cart (id, user_id, product_id, 
-      quantity, checked, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+    insert into mmall_cart (user_id, product_id,quantity, checked, create_time, update_time)
+    values (#{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
       #{quantity,jdbcType=INTEGER}, #{checked,jdbcType=INTEGER}, now(),now())
   </insert>
   <insert id="insertSelective" parameterType="com.mmall.pojo.Cart" >
@@ -115,4 +113,48 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectCartByUserIdAndProuctId" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from mmall_cart
+    where user_id = #{userId} and product_id = #{productId}
+  </select>
+
+  <select id="selectCartByUserId" resultMap="BaseResultMap" parameterType="int">
+    select
+    <include refid="Base_Column_List"/>
+    from mmall_cart
+    where user_id = #{userId}
+  </select>
+
+  <select id="selectCartProductCheckedStatusByUserId" resultType="int" parameterType="int">
+    select count(1)
+    from mmall_cart
+    where checked = 0 and user_id = #{userId}
+  </select>
+
+  <delete id="deleteByUserIdAndProductIds" parameterType="map">
+    delete from mmall_cart
+    where user_id = #{userId}
+    <if test = "productIds != null">
+      and product_id in
+      <foreach collection="productIds" item="item" index="index" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+  </delete>
+
+  <update id="checkedOrUnCheckedAllProduct" parameterType="map">
+    update mmall_cart set checked = #{checked},update_time=now()
+    where user_id = #{userId}
+    <if test="productId != null">
+      and product_id = #{productId}
+    </if>
+  </update>
+
+  <select id="selectProductCount" parameterType="int" resultType="int">
+    select IFNULL(sum(quantity),0) from mmall_cart
+    where user_id = #{userId}
+  </select>
 </mapper>
