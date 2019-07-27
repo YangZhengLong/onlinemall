@@ -61,4 +61,83 @@ public class Const {
             this.code = code;
         }
     }
+
+    public enum PaymentTypeEnum{
+        ONLINE_PAY(1,"在线支付");
+
+        private int code;
+        private String desc;
+
+        PaymentTypeEnum(int code,String desc){
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public static PaymentTypeEnum codeOf(int code){
+            for(PaymentTypeEnum paymentTypeEnum:values()){
+                if(paymentTypeEnum.getCode() == code){
+                    return paymentTypeEnum;
+                }
+            }
+            throw new RuntimeException("没有找到对应的支付类型");
+        }
+    }
+
+    public enum OrderStatusEnum{
+        NO_PAY(10,"未付款"),
+        PAY(20,"已付款"),
+        CANCEL(0,"已付款"),
+        SHIPPED(40,"已发货");
+
+        private int code;
+        private String desc;
+
+         OrderStatusEnum(int code,String desc){
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public static OrderStatusEnum codeOf(int code){
+             for (OrderStatusEnum orderStatusEnum:values()){
+                 if(orderStatusEnum.getCode() == code){
+                     return  orderStatusEnum;
+                 }
+             }
+             throw  new RuntimeException("未找到对应的订单状态");
+        }
+    }
+
+
 }
